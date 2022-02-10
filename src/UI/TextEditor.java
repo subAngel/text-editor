@@ -4,21 +4,38 @@ import javax.swing.*;
 
 public class TextEditor extends JFrame {
     JMenuBar menuBar;
-    JMenu menu;
-    JMenuItem menuItem;
+    JMenu menuArchivo, menuEditar;
+    JMenuItem itemCargar, itemGuardar, itemSalir, itemCopiar, itemPegar, itemBuscar;
     JFrame frame;
 
     public TextEditor(){
-        initComponents();
+        initMenu();
     }
 
-    public void initComponents(){
+    public void initFrame(){
         this.setTitle("Editor de texto todo feo ._ .");
         this.setResizable(false);
         this.setSize(600,500);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+    }
+
+    // Iniciar metodo para mostrar el menu
+    public void initMenu(){
+        /* Creamos el JMenuBar y los asociamos con el frame */
+        menuBar = new JMenuBar();
+        this.setJMenuBar(menuBar);
+
+        /* Creo el menu para las opciones del archivo */
+        menuArchivo = new JMenu("Archivo");
+        menuBar.add(menuArchivo);
+
+        /* menu para editar el archivo de texto */
+        menuEditar = new JMenu("Editar");
+        menuBar.add(menuEditar);
+
+        initFrame();
     }
 
     public static void main(String[] args) {
