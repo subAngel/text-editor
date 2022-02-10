@@ -18,6 +18,7 @@ public class TextEditor extends JFrame implements ActionListener {
     Font font2 = new Font("Segoi UI", Font.BOLD, 16);
     JScrollPane scroll;
     String cargar="Cargar Archivo", guardar="Guardar Archivo", salir="Salir", copiar="Copiar", pegar="Pegar", buscar="Buscar";
+    
 
     public TextEditor(){
         initMenu();
@@ -92,22 +93,27 @@ public class TextEditor extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==itemGuardar){
 //            System.out.println("Guardar texto");
-            LecturaEscritura();
+            guardarFichero();
         }else if(e.getSource()==itemAbrir){
             abrirFichero();
         }
     }
 
     // metodo para lectura y escritura de un fichero de texto
-    public void LecturaEscritura(){
+    public void guardarFichero(){
         try{
             JFileChooser fileChooser = new JFileChooser();
-            int seleccion = fileChooser.showOpenDialog(textArea);
-            PrintWriter fichero = new PrintWriter("Documento de texto.txt");
-            String aux = textArea.getText();
-            fichero.println(aux);
-            System.out.println(aux);
-            fichero.close();
+
+            String filename = JOptionPane.showInputDialog(null, "Como quiere guardar su archivo?","Guardar Fichero",JOptionPane.QUESTION_MESSAGE);
+//            filename.replace(" ", "-");
+            String ruta = System.getProperty("user.dir")+"\\"+filename+".txt";
+            String content = textArea.getText();
+
+            System.out.println(ruta);
+            PrintWriter writer = new PrintWriter(ruta, "UTF-8");
+            writer.println(content);
+            writer.close();
+
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -138,6 +144,9 @@ public class TextEditor extends JFrame implements ActionListener {
 
     }
 
+    public String getNameFile(){
+
+    }
 
 
     public static void main(String[] args) {
