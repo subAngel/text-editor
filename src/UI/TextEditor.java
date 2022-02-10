@@ -1,12 +1,15 @@
 package UI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class TextEditor extends JFrame {
     JMenuBar menuBar;
     JMenu menuArchivo, menuEditar;
     JMenuItem itemCargar, itemGuardar, itemSalir, itemCopiar, itemPegar, itemBuscar;
-    JFrame frame;
+    JTextArea textArea;
+    Font font;
+    JScrollPane scroll;
 
     public TextEditor(){
         initMenu();
@@ -36,7 +39,7 @@ public class TextEditor extends JFrame {
         menuBar.add(menuEditar);
 
         // items para el munu de archivo
-        itemGuardar = new JMenuItem("Guardar");
+        itemGuardar = new JMenuItem("Guardar Archivo");
         itemCargar = new JMenuItem("Cargar Archivo");
         itemSalir = new JMenuItem("Salir");
         menuArchivo.add(itemGuardar);
@@ -51,6 +54,15 @@ public class TextEditor extends JFrame {
         menuEditar.add(itemPegar);
         menuEditar.add(itemBuscar);
 
+        // Cuadro de texto donde se editara el texto
+        textArea = new JTextArea();
+        font = new Font("Segoi UI", Font.BOLD, 15);
+        scroll = new JScrollPane();
+        textArea.setLineWrap(true);
+        textArea.setFont(font);
+        textArea.setWrapStyleWord(true);
+        scroll.setViewportView(textArea);
+        this.add(scroll);
 
         initFrame();
     }
