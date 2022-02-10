@@ -35,6 +35,23 @@ public class TextEditor extends JFrame {
         menuEditar = new JMenu("Editar");
         menuBar.add(menuEditar);
 
+        // items para el munu de archivo
+        itemGuardar = new JMenuItem("Guardar");
+        itemCargar = new JMenuItem("Cargar Archivo");
+        itemSalir = new JMenuItem("Salir");
+        menuArchivo.add(itemGuardar);
+        menuArchivo.add(itemCargar);
+        menuArchivo.add(itemSalir);
+
+        // items para el menu de Editar
+        itemCopiar = new JMenuItem("Copiar");
+        itemPegar = new JMenuItem("Pegar");
+        itemBuscar = new JMenuItem("Buscar");
+        menuEditar.add(itemCopiar);
+        menuEditar.add(itemPegar);
+        menuEditar.add(itemBuscar);
+
+
         initFrame();
     }
 
