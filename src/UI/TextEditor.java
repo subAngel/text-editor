@@ -6,13 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class TextEditor extends JFrame implements ActionListener {
     JMenuBar menuBar;
     JMenu menuArchivo, menuEditar;
-    JMenuItem itemCargar, itemGuardar, itemSalir, itemCopiar, itemPegar, itemCortar, itemBuscar;
+    JMenuItem itemAbrir, itemGuardar, itemSalir, itemCopiar, itemPegar, itemCortar, itemBuscar;
     JSeparator separator;
     JTextArea textArea;
     Font font1 = new Font("Segoi UI", Font.PLAIN, 15);
@@ -54,10 +53,10 @@ public class TextEditor extends JFrame implements ActionListener {
 
         // items para el munu de archivo
         itemGuardar = new JMenuItem("Guardar Archivo");
-        itemCargar = new JMenuItem("Cargar Archivo");
+        itemAbrir = new JMenuItem("Abrir Archivo");
         itemSalir = new JMenuItem("Salir");
         menuArchivo.add(itemGuardar);
-        menuArchivo.add(itemCargar);
+        menuArchivo.add(itemAbrir);
         menuArchivo.add(itemSalir);
 
         // items para el menu de Editar
@@ -85,7 +84,7 @@ public class TextEditor extends JFrame implements ActionListener {
 
         // agregar los escuchadores de eventos
         itemGuardar.addActionListener(this);
-
+        itemAbrir.addActionListener(this);
         initFrame();
     }
 
@@ -93,13 +92,17 @@ public class TextEditor extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==itemGuardar){
 //            System.out.println("Guardar texto");
-            guardarFichero();
+            LecturaEscritura();
+        }else if(e.getSource()==itemAbrir){
+            abrirFichero();
         }
     }
 
     // metodo para lectura y escritura de un fichero de texto
-    public void guardarFichero(){
+    public void LecturaEscritura(){
         try{
+            JFileChooser fileChooser = new JFileChooser();
+            int seleccion = fileChooser.showOpenDialog(textArea);
             PrintWriter fichero = new PrintWriter("Documento de texto.txt");
             String aux = textArea.getText();
             fichero.println(aux);
@@ -108,7 +111,30 @@ public class TextEditor extends JFrame implements ActionListener {
         }catch(Exception ex){
             ex.printStackTrace();
         }
+    }
 
+    public void abrirFichero(){
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            int seleccion = fileChooser.showOpenDialog(textArea);
+
+            if(seleccion == JFileChooser.APPROVE_OPTION){
+                File fichero = fileChooser.getSelectedFile();
+                BufferedReader reader = new BufferedReader(new FileReader(fichero));
+                // BufferedReader va leyendo de linea por linea
+                String lineatotal="";
+                String linea = reader.readLine();
+                while(linea != null){
+                    lineatotal = lineatotal + linea + System.getProperty("line.separator");
+                    linea = reader.readLine();
+                }
+                textArea.setText(lineatotal);
+                reader.close();
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
 
     }
 
