@@ -3,6 +3,7 @@ package UI;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +19,7 @@ public class TextEditor extends JFrame implements ActionListener {
     Font font2 = new Font("Segoi UI", Font.BOLD, 16);
     JScrollPane scroll;
     String cargar="Cargar Archivo", guardar="Guardar Archivo", salir="Salir", copiar="Copiar", pegar="Pegar", buscar="Buscar";
-    
+
 
     public TextEditor(){
         initMenu();
@@ -86,6 +87,7 @@ public class TextEditor extends JFrame implements ActionListener {
         // agregar los escuchadores de eventos
         itemGuardar.addActionListener(this);
         itemAbrir.addActionListener(this);
+        itemSalir.addActionListener(this);
         initFrame();
     }
 
@@ -94,8 +96,11 @@ public class TextEditor extends JFrame implements ActionListener {
         if(e.getSource()==itemGuardar){
 //            System.out.println("Guardar texto");
             guardarFichero();
+            this.setTitle(getNameFile());
         }else if(e.getSource()==itemAbrir){
             abrirFichero();
+        }else if(e.getSource()==itemSalir){
+            this.dispose();
         }
     }
 
@@ -104,9 +109,7 @@ public class TextEditor extends JFrame implements ActionListener {
         try{
             JFileChooser fileChooser = new JFileChooser();
 
-            String filename = JOptionPane.showInputDialog(null, "Como quiere guardar su archivo?","Guardar Fichero",JOptionPane.QUESTION_MESSAGE);
-//            filename.replace(" ", "-");
-            String ruta = System.getProperty("user.dir")+"\\"+filename+".txt";
+            String ruta = System.getProperty("user.dir")+"\\"+getNameFile();
             String content = textArea.getText();
 
             System.out.println(ruta);
@@ -121,31 +124,41 @@ public class TextEditor extends JFrame implements ActionListener {
 
     public void abrirFichero(){
         try {
-            JFileChooser fileChooser = new JFileChooser();
-            int seleccion = fileChooser.showOpenDialog(textArea);
+            //Se crea el JFileChooser, se le indica que la ventana se abrira en el directiorio acutal
+            JFileChooser fileChooser = new JFileChooser(".");
+            // Se carga el filtro. El primer parametro es el mensaje que muestra
+            // El segundo es la extension de los ficheros que se van a mostrar
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (.txt)", "txt");
+            // Se le asigna al JFileChooser el filtro
+            fileChooser.setFileFilter(filtro);
+            // se muestra la ventana
+            int valor = fileChooser.showOpenDialog(fileChooser);
 
-            if(seleccion == JFileChooser.APPROVE_OPTION){
-                File fichero = fileChooser.getSelectedFile();
-                BufferedReader reader = new BufferedReader(new FileReader(fichero));
-                // BufferedReader va leyendo de linea por linea
-                String lineatotal="";
-                String linea = reader.readLine();
-                while(linea != null){
-                    lineatotal = lineatotal + linea + System.getProperty("line.separator");
-                    linea = reader.readLine();
+            if(valor == JFileChooser.APPROVE_OPTION){
+                try {
+                    File fichero = fileChooser.getSelectedFile();
+                    BufferedReader reader = new BufferedReader(new FileReader(fichero));
+                    // BufferedReader va leyendo de linea por linea
+                    String lineatotal="";
+                    String linea = reader.readLine();
+                    while(linea != null){
+                        lineatotal = lineatotal + linea + System.getProperty("line.separator");
+                        linea = reader.readLine();
+                    }
+                    textArea.setText(lineatotal);
+                    reader.close();
+                } catch(FileNotFoundException e){
+                    e.printStackTrace();
                 }
-                textArea.setText(lineatotal);
-                reader.close();
             }
-
         }catch (Exception ex){
             ex.printStackTrace();
         }
-
     }
 
     public String getNameFile(){
-
+        String filename = JOptionPane.showInputDialog(null, "Como quiere guardar su archivo?","Guardar Fichero",JOptionPane.QUESTION_MESSAGE);
+        return filename+".txt";
     }
 
 
